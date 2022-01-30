@@ -1,0 +1,11 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "editor.formatOnSave": true,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#2008a8",
+    "titleBar.activeBackground": "#0f7ea038",
+    "titleBar.activeForeground": "#EEFDF8"
+  }
+}
