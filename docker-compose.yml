@@ -1,29 +1,47 @@
 version: "3.8"
 
 services:
-  web:
-    build: ./project
+  api:
+    build:
+      context: ./project
+      dockerfile: Dockerfile
+      args:
+        # Update 'VARIANT' to pick a version of Python: 3, 3.10, 3.9, 3.8, 3.7, 3.6
+        # Append -bullseye or -buster to pin to an OS version.
+        # Use -bullseye variants on local arm64/Apple Silicon.
+        VARIANT: 3.10-bullseye
+    image: backend:fastapi
     command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     volumes:
-      - ./project:/usr/src/app
+      - ./project:/usr/src/app:ro
     ports:
-      - 8004:8000
+      # Host:Container
+      - 9000:8000
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
-      - DATABASE_URL=postgres://postgres:postgres@web-db:5432/web_dev
-      - DATABASE_TEST_URL=postgres://postgres:postgres@web-db:5432/web_test
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/api_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@db:5432/api_test
     depends_on:
-      - web-db
+      - db
 
-  web-db:
+  db:
     build:
       context: ./project/db
       dockerfile: Dockerfile
+      args:
+        VARIANT: 14-alpine
+    image: db:postgres-14-alpine
+    restart: unless-stopped
     ports:
-      - "5432:5432"
-    expose:
-      - 5432
+      # Host:Container
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  postgres-data: 

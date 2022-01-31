@@ -1,5 +1,7 @@
 # pull official base image
-FROM python:3.10.1-slim-buster
+# Python version (use -bullseye variants on local arm64/Apple Silicon)
+ARG VARIANT=3.10-bullseye
+FROM python:${VARIANT}
 
 # set working directory
 WORKDIR /usr/src/app
@@ -14,16 +16,20 @@ RUN apt-get update \
   && apt-get clean
 
 # install python dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY requirements.txt /tmp/pip-tmp/
+RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+  && rm -rf /tmp/pip-tmp
 
 # add app
 COPY . .
 
 # add entrypoint.sh
 COPY ./entrypoint.sh .
-RUN chmod +x /usr/src/app/entrypoint.sh
+RUN chmod + /usr/src/app/entrypoint.sh
+
+# Set up a non-root user
+RUN groupadd -r user && useradd -r -g user user
+USER user
 
 # run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
