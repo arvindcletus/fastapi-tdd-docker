@@ -10,10 +10,10 @@ services:
         # Append -bullseye or -buster to pin to an OS version.
         # Use -bullseye variants on local arm64/Apple Silicon.
         VARIANT: 3.10-bullseye
-    image: backend:fastapi
+    image: api:fastapi
     command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     volumes:
-      - ./project:/usr/src/app:ro
+      - ./project:/usr/src/app
     ports:
       # Host:Container
       - 9000:8000
