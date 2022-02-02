@@ -12,3 +12,10 @@ async def post(payload: SummaryPayloadSchema) -> int:
     )
     await summary.save()
     return summary.id
+
+
+async def get(id: int) -> dict | None:
+    summary = await TextSummary.filter(id=id).first().values()
+    if summary:
+        return summary
+    return None
