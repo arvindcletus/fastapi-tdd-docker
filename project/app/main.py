@@ -1,4 +1,4 @@
-# project/app/main.py
+"""# project/app/main.py"""
 
 import logging
 
@@ -12,6 +12,7 @@ log = logging.getLogger("uvicorn")
 
 
 def create_application() -> FastAPI:
+    """Create a FastAPI application"""
     application = FastAPI()
     application.include_router(ping.router)
     application.include_router(
@@ -25,10 +26,12 @@ app = create_application()
 
 @app.on_event("startup")
 async def startup_event():
+    """Define a startup function"""
     log.info("Starting up...")
     init_db(app)
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
+    """Define a shutdown function"""
     log.info("Shutting down...")

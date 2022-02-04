@@ -1,4 +1,4 @@
-# project/tests/conftest.py
+"""# project/tests/conftest.py"""
 
 
 import os
@@ -12,11 +12,13 @@ from app.config import get_settings, Settings
 
 
 def get_settings_override():
+    """Create an override function for testing"""
     return Settings(testing=1, database_url=os.environ.get("DATABASE_TEST_URL"))
 
 
 @pytest.fixture(scope="module")
 def test_app():
+    """Define a function test_app()"""
     # set up
     app = create_application()
     app.dependency_overrides[get_settings] = get_settings_override
@@ -30,6 +32,7 @@ def test_app():
 
 @pytest.fixture(scope="module")
 def test_app_with_db():
+    """Define a function test_app_with_db()"""
     # set up
     app = create_application()
     app.dependency_overrides[get_settings] = get_settings_override

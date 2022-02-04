@@ -1,4 +1,4 @@
-# project/app/db.py
+"""# project/app/db.py"""
 
 
 import logging
@@ -24,6 +24,7 @@ TORTOISE_ORM = {
 
 
 def init_db(app: FastAPI) -> None:
+    """Function to initialize the db"""
     register_tortoise(
         app,
         db_url=os.environ.get("DATABASE_URL"),
@@ -34,6 +35,7 @@ def init_db(app: FastAPI) -> None:
 
 
 async def generate_schema() -> None:
+    """Function to generate a schema using TortoiseORM"""
     log.info("Initializing Tortoise...")
 
     await Tortoise.init(

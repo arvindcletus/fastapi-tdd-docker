@@ -1,10 +1,11 @@
-# project/tests/test_ping.py
+"""# project/tests/test_ping.py"""
 
 
 from app import main
 
 
 def test_ping(test_app):
+    """Test that ping works"""
     # Given
     # test_app
 
