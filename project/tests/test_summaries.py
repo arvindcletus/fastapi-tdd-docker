@@ -3,11 +3,13 @@
 
 import json
 
-import pytest
-
 
 def test_create_summary(test_app_with_db):
-    """Test to check for a valid POST request"""
+    """
+    GIVEN test_app_with_db
+    WHEN the POST method is called with valid data
+    THEN a response status of 201 created should be returned
+    """
 
     response = test_app_with_db.post(
         "/summaries/", data=json.dumps({"url": "https://foo.bar"}))
@@ -17,7 +19,11 @@ def test_create_summary(test_app_with_db):
 
 
 def test_create_summaries_invalid_json(test_app):
-    """Test to check for a invalid POST request"""
+    """
+    GIVEN test_app
+    WHEN the POST method is called with missing fields
+    THEN a response message stating a value error should be returned
+    """
 
     response = test_app.post("/summaries/", data=json.dumps({}))
     assert response.status_code == 422
@@ -33,7 +39,12 @@ def test_create_summaries_invalid_json(test_app):
 
 
 def test_read_summary(test_app_with_db):
-    """Test to get a single summary route"""
+    """
+    GIVEN test_app_with_db
+    WHEN the POST method is called with valid data
+    THEN a response with id, url, summary and
+        created_at values should be returned
+    """
 
     response = test_app_with_db.post(
         "/summaries/", data=json.dumps({"url": "https://foo.bar"}))
@@ -50,7 +61,11 @@ def test_read_summary(test_app_with_db):
 
 
 def test_read_summary_incorrect_id(test_app_with_db):
-    """Test to check for an incorrect id"""
+    """
+    GIVEN test_app_with_db
+    WHEN the POST method is called with an invalid id
+    THEN a 404 response message should be returned
+    """
 
     response = test_app_with_db.get("/summaries/999/")
     assert response.status_code == 404
