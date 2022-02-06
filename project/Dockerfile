@@ -3,8 +3,19 @@
 ARG VARIANT=3.10-bullseye
 FROM python:${VARIANT}
 
+# create directory for the app user
+RUN mkdir -p /home/app
+
+# create the app user
+RUN addgroup --system app && adduser --system --group app
+
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+
 # set working directory
-WORKDIR /usr/src/app
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -23,13 +34,15 @@ RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requi
 # add app
 COPY . .
 
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
 # add entrypoint.sh
 COPY ./entrypoint.sh .
-RUN chmod + /usr/src/app/entrypoint.sh
+RUN chmod + /home/app/web/entrypoint.sh
 
-# Set up a non-root user
-RUN groupadd -r user && useradd -r -g user user
-USER user
+# change to the app user
+USER app
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/home/app/web/entrypoint.sh"]
