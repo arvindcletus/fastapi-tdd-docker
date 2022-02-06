@@ -1,12 +1,13 @@
 """# project/app/api/crud.py"""
 
 
+from typing import List
 from app.models.pydantic import SummaryPayloadSchema
 from app.models.tortoise import TextSummary
 
 
 async def post(payload: SummaryPayloadSchema) -> int:
-    """Test that a summary is created"""
+    """Function that creates a summary"""
     summary = TextSummary(
         url=payload.url,
         summary="dummy summary",
@@ -16,8 +17,14 @@ async def post(payload: SummaryPayloadSchema) -> int:
 
 
 async def get(id: int) -> dict | None:
-    """Test that a single summary can be fetched"""
+    """Function that fetches a single summary"""
     summary = await TextSummary.filter(id=id).first().values()
     if summary:
         return summary
     return None
+
+
+async def get_all() -> List:
+    """Function that fetches all summary"""
+    summaries = await TextSummary.all().values()
+    return summaries
