@@ -13,8 +13,6 @@ services:
         VARIANT: 3.10-bullseye
     image: api:fastapi
     command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
-    volumes:
-      - ./project:/usr/src/app
     ports:
       # Host:Container
       - 9000:8000
