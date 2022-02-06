@@ -21,20 +21,21 @@ services:
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/api_dev
-      - DATABASE_TEST_URL=postgres://postgres:postgres@db:5432/api_test
+      - DATABASE_URL=postgres://postgres:postgres@api-db:5432/api_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@api-db:5432/api_test
     networks:
       - api_gateway
     depends_on:
-      - db
-  db:
+      - api-db
+
+  api-db:
     container_name: fastapi-db_container
     build:
       context: ./project/db
       dockerfile: Dockerfile
       args:
         VARIANT: 14-alpine
-    image: db:postgres-14-alpine
+    image: postgres-db:14-alpine
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -44,9 +45,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     networks:
       - api_gateway
       - db_gateway
+
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
@@ -58,8 +65,10 @@ services:
       - "5050:80"
     networks:
       - db_gateway
+
 volumes:
-  postgres-data: 
+  postgres-data:
+
 networks:
   api_gateway:
   db_gateway:
