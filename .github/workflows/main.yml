@@ -75,7 +75,7 @@ jobs:
       # - name: isort
       #   run: docker exec fastapi-tdd python -m isort . --check-only
 
-  lint:
+  black:
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -83,7 +83,6 @@ jobs:
         with:
           ref: master
       - uses: psf/black@stable
-      - name: Black Code Formatter
         with:
           options: "--check --verbose"
           src: "./project"
