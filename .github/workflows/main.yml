@@ -80,8 +80,10 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: master
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
           src: "./project"
-          version: "21.5b1"
+          version: "22.1.0"
