@@ -77,9 +77,10 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v2
-      - uses: psf/black@master
+      - uses: psf/black@stable
         with:
           options: "--check --verbose"
           src: "./project"
