@@ -7,6 +7,7 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 class TextSummary(models.Model):
     """Create a TextSummary model"""
+
     url = fields.TextField()
     summary = fields.TextField()
     created_at = fields.DatetimeField(auto_now_add=True)
