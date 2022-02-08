@@ -12,7 +12,7 @@ router = APIRouter()
 async def pong(settings: Settings = Depends(get_settings)):
     """Function that gets a ping"""
     return {
-        "ping": "pong!",
+        "ping": "hello!",
         "environment": settings.environment,
         "testing": settings.testing,
     }
