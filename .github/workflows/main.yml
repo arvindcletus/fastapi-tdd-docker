@@ -76,6 +76,7 @@ jobs:
       #   run: docker exec fastapi-tdd python -m isort . --check-only
 
   lint:
+    name: Run
     runs-on: ubuntu-latest
     needs: [build, test]
     steps:
@@ -83,4 +84,5 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
+          src: "./project"
           version: "22.1.0"
