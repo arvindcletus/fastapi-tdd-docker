@@ -76,7 +76,7 @@ jobs:
       #   run: docker exec fastapi-tdd python -m isort . --check-only
 
   lint:
-    name: Perform Linting
+    name: Black
     runs-on: ubuntu-latest
     needs: [build, test]
     steps:
