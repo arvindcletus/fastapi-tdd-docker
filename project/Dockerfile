@@ -3,15 +3,12 @@
 ARG VARIANT=3.10-bullseye
 FROM python:${VARIANT}
 
-# create directory for the app user
-RUN mkdir -p /home/app
-
 # create the app user
 RUN addgroup --system app && adduser --system --group app
 
 # create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
+ENV HOME=/usr/src
+ENV APP_HOME=/usr/src/app
 
 # set working directory
 RUN mkdir $APP_HOME
@@ -39,10 +36,10 @@ RUN chown -R app:app $APP_HOME
 
 # add entrypoint.sh
 COPY ./entrypoint.sh .
-RUN chmod + /home/app/web/entrypoint.sh
+RUN chmod + /usr/src/app/entrypoint.sh
 
 # change to the app user
 USER app
 
 # run entrypoint.sh
-ENTRYPOINT ["/home/app/web/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

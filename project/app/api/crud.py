@@ -29,3 +29,18 @@ async def get_all() -> List:
     """Function that fetches all summary"""
     summaries = await TextSummary.all().values()
     return summaries
+
+
+async def delete(id: int) -> int:
+    """Function to delete a summary by id"""
+    summary = await TextSummary.filter(id=id).first().delete()
+    return summary
+
+
+async def put(id: int, payload: SummaryPayloadSchema) -> dict | None:
+    """Function to update a summary by id"""
+    summary = await TextSummary.filter(id=id).update(url=payload.url, summary=payload.summary)
+    if summary:
+        updated_summary = await TextSummary.filter(id=id).first().values()
+        return updated_summary
+    return None

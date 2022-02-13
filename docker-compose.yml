@@ -21,6 +21,8 @@ services:
       - TESTING=0
       - DATABASE_URL=postgres://postgres:postgres@api-db:5432/api_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@api-db:5432/api_test
+    volumes:
+      - ./project:/usr/src/app
     networks:
       - api_gateway
     depends_on:
