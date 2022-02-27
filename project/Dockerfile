@@ -27,6 +27,7 @@ RUN apt-get update \
 COPY requirements.txt /tmp/pip-tmp/
 RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
   && rm -rf /tmp/pip-tmp
+RUN python -m nltk.downloader punkt
 
 # add app
 COPY . .
