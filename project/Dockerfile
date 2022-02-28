@@ -1,18 +1,8 @@
 # pull official base image
-# Python version (use -bullseye variants on local arm64/Apple Silicon)
-ARG VARIANT=3.10-bullseye
-FROM python:${VARIANT}
-
-# create the app user
-RUN addgroup --system app && adduser --system --group app
-
-# create the appropriate directories
-ENV HOME=/usr/src
-ENV APP_HOME=/usr/src/app
+FROM python:3.10.1-slim-buster
 
 # set working directory
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
+WORKDIR /usr/src/app
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -25,22 +15,16 @@ RUN apt-get update \
 
 # install python dependencies
 COPY requirements.txt /tmp/pip-tmp/
-RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+COPY requirements-dev.txt /tmp/pip-tmp/
+RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements-dev.txt \
   && rm -rf /tmp/pip-tmp
-RUN python -m nltk.downloader punkt
 
 # add app
 COPY . .
 
-# chown all the files to the app user
-RUN chown -R app:app $APP_HOME
-
 # add entrypoint.sh
 COPY ./entrypoint.sh .
 RUN chmod + /usr/src/app/entrypoint.sh
-
-# change to the app user
-USER app
 
 # run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
